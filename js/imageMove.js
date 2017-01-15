@@ -26,7 +26,11 @@ function toRadians (angle) {
 function initObjMoveRotate(obj, delta) {
 	var value = 0;
 	var realValue = value + delta;
-	var angle = realValue % 90;
+	var angle;
+	var cosStep;
+	var sinStep;
+
+	calcAfterRotate(); 
 
 	obj.rotate({
 	  bind:
@@ -53,61 +57,58 @@ function initObjMoveRotate(obj, delta) {
 		var top = obj.cssNum('top');
 		var left = obj.cssNum('left');	
 
-		
-		
-
 		//console.log('top: ' + top + ', left: ' + left);
 
 		switch(e.which) {
 			case 37: // left
 				getValue = rotateLeft
 				obj.trigger('click');
-				realValue = value + delta;
-				angle = toRadians(realValue % 90);
+				calcAfterRotate();
 			break;
 
 			case 39: // right
 				getValue = rotateRight;
 				obj.trigger('click');
-				realValue = value + delta;
-				angle = toRadians(realValue % 90);
+				calcAfterRotate();
 			break;
 
 			case 38: // up
 				if(realValue >=0 && realValue < 90) {
-					var x = Math.cos(angle) * step;
-					var y = Math.sin(angle) * step;
-					obj.css('top', top + y);
-					obj.css('left', left + x);
+					obj.css('top', top + sinStep);
+					obj.css('left', left + cosStep);
 				}
 				if(realValue >= 90 && realValue <= 180) {
-					var x = Math.sin(angle) * step;
-					var y = Math.cos(angle) * step;
-					obj.css('top', top + y);
-					obj.css('left', left - x);
+					obj.css('top', top + cosStep);
+					obj.css('left', left - sinStep);
 				}
 				if(realValue > 180 && realValue <= 270) {
-					var x = Math.cos(angle) * step;
-					var y = Math.sin(angle) * step;
-					obj.css('top', top - y);
-					obj.css('left', left - x);
+					obj.css('top', top - sinStep);
+					obj.css('left', left - cosStep);
 				}
 				if(realValue > 270 && realValue <= 360) {
-					var x = Math.sin(angle) * step;
-					var y = Math.cos(angle) * step;
-					obj.css('top', top - y);
-					obj.css('left', left + x);
+					obj.css('top', top - cosStep);
+					obj.css('left', left + sinStep);
 				}												
 			break;
 			
 			default: return;
 		}
+		e.preventDefault(); // prevent the default action (scroll / move caret)
+	});
+
+	function calcAfterRotate(){
+		var valueModulo = value % 360;
+		valueModulo = valueModulo<0?360+valueModulo:valueModulo;
+		realValue = valueModulo + delta;
+		angle = toRadians(valueModulo);
+		//angle = toRadians(realValue % 90);
+		cosStep = Math.cos(angle) * step;
+		sinStep = Math.sin(angle) * step;
+
 		console.log('angle: ' + angle);
 		console.log('value: ' + value);
 		console.log('realValue: ' + realValue);		
-
-		e.preventDefault(); // prevent the default action (scroll / move caret)
-	});
+	}
 	
 }
 
