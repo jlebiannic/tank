@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Jeu</title>
+    <style type="text/css">
+
+		#jeu{
+		  width: 400px;
+		  height: 380px;
+		  border: 2px black solid;
+		  overflow: hidden;
+		  position: relative;
+		}
+
+		.fond{
+		  margin-bottom:-5px;
+		  z-index: 10;
+		  position: relative;
+		}
+		
+		#vj {
+			position : absolute;
+			top : 	0px;
+			left : 70px;
+			z-index: 30;
+		}
+		
+		#vr {
+			position : absolute;
+			top : 385px;
+			left : 170px;
+			z-index: 30;
+		}
+
+		
+		
+    </style>
+  </head>
+  <body>	
+
+	Collisions : <span id="info">0</span>
+	<div id="jeu">
+	  <img id="fond1" class="fond" src="route.png">
+	  <img id="fond2" class="fond" src="route.png">
+	  <img id="vj" class="voiture" src="vj.png">
+	  <img id="vr" class="voiture" src="vr.png">
+	</div>
+	<button onClick="$('.fond').stop(); $('#vr').stop()">Stop</button>
+	<audio preload="auto" id="son">
+	  <source src="beep.mp3" type="audio/mp3">
+	  <source src="beep.ogg" type="audio/ogg">
+	</audio>
+
+
+  <script src="jquery.js"></script>
+    <script>
+	$(function(){  
+
+		// Renvoie un entier aléatoire entre une valeur min (incluse)
+		// et une valeur max (exclue).	
+		function getRandomInt(min, max) {
+		  min = Math.ceil(min);
+		  max = Math.floor(max);
+		  return Math.floor(Math.random() * (max - min)) + min;
+		}
+	
+		// Renvoie la propriété css sous forme d'entier
+		jQuery.fn.cssNum = function(prop){
+			var v = parseInt(this.css(prop),10);
+			return isNaN(v) ? 0 : v;
+		};	
+		var vj = $('#vj');
+		var vr = $('#vr');
+  
+		// défilement route
+		function animeFond(){
+			$('.fond').animate({top : '-=360'}, 1000, 'linear', function(){
+				$(this).css('top', 0);
+				animeFond();
+			});
+		}
+		animeFond();
+		
+		// Voiture jaune
+		$(document).keydown(function(e) {
+			var step = 12;
+			var top = vj.cssNum('top');
+			var left = vj.cssNum('left');			
+			
+			//console.log('top: ' + top + ', left: ' + left);
+			
+			switch(e.which) {
+				case 37: // left
+					if(left>40) vj.css('left', left-step);
+				break;
+
+				case 38: // up
+					if(top>0) vj.css('top', top-step);
+				break;
+
+				case 39: // right
+					if(left<293) vj.css('left', left+step);
+				break;
+
+				case 40: // down
+					if(top<229) vj.css('top', top+step);
+				break;
+
+				/*case 36: // Diagonale haut et gauche
+					if(top>0) vj.css('top', top-step);
+					if(left>40) vj.css('left', left-step);
+				break;*/
+				
+				default: return;
+			}
+			e.preventDefault(); // prevent the default action (scroll / move caret)
+		});
+		
+		// Test collision toutes les 20 ms
+		var longueurVoiture = 150;
+		var largeurVoiture = 66;
+		var collision = 0;
+		function testCollision(){
+			var topVj = vj.cssNum('top');
+			var leftVj = vj.cssNum('left');
+			var topVr = vr.cssNum('top');
+			var leftVr = vr.cssNum('left');
+			
+			if((collision==0 && topVr>topVj && topVr<topVj+longueurVoiture && leftVr>leftVj && leftVr<leftVj+largeurVoiture)|| 
+			   (collision==0 && topVr>topVj && topVr<topVj+longueurVoiture && leftVr+largeurVoiture>leftVj && leftVr+largeurVoiture<leftVj+largeurVoiture)
+			) {
+				$('#info').text(parseInt($('#info').text()) + 1);
+				collision=1;
+				$('#son')[0].play();
+			}
+			
+		}
+		setInterval(testCollision, 20);
+		
+		// Voiture rouge
+		var borneLeftMin = 40;
+		var borneLeftMax = 294;
+		var leftVr = getRandomInt(borneLeftMin, 294);
+		//console.log(leftVr);
+		vr.css('left', leftVr);
+		function animeVr(){
+			vr.animate({top : '-=560'}, 2500, 'linear', function(){
+				leftVr = getRandomInt(borneLeftMin, 294);
+				$(this).css('top', 385);
+				$(this).css('left', leftVr);
+				collision = 0;
+				animeVr();
+			});
+		}
+		animeVr();		
+  	});
+    </script> 
+  </body>
+</html>

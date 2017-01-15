@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tank</title>
+
+    <style type="text/css">
+
+		#tank {
+			position : absolute;
+			top : 100px;
+			left : 100px;
+		}
+		
+    </style>
+
+</head>
+<body>
+	<div id="jeu">
+	  <img id="tank" class="voiture" src="asset/img/vj.png">
+	</div>
+
+
+	<script src="asset/lib/jquery-3.1.1.js"></script>
+	<script src="asset/lib/jqueryRotate-V2.3.js"></script>
+	<script src="js/imageMove.js"></script>
+
+    <script>
+	$(function(){
+	 	var tankImg = $('#tank');  
+		//tankImg.css('top', 10);
+		//tankImg.css('left', 10);
+		initObjMoveRotate(tankImg, 90);
+  	});
+    </script> 
+
+</body>
+</html>
