@@ -1,0 +1,30 @@
+# Project members authenticate over HTTPS to allow committing changes.
+svn checkout https://vitec-project.googlecode.com/svn/trunk/ vitec-project --username jlebiannic@gmail.com
+=>When prompted, enter your generated googlecode.com password.
+
+
+# Non-members may check out a read-only working copy anonymously over HTTP.
+svn checkout http://vitec-project.googlecode.com/svn/trunk/ vitec-project-read-only
+
+
+https://code.google.com/p/vitec-project/
+sm2qB8cU7Cr9
+
+
+
+
+###RAF###
+- TODO à traiter
+- Gestion action "Créer un nouvelle base" alors qu'une autre est déjà ouverte
+- Gestion close base
+- Gérer tri/vue pas genre
+- Changer image
+- Menu About
+
+DONE
+- Gestion mode dirty
+- Gestion sauvegarde améliorée de la base (avec le mode dirty => "voulez-vous sauvegarder la base ?" à la fermeture de l'appli si pas d'enregistrement effectué avant)
+- Gestion suppression dans le tableau d'analyse
+- Afficher le nom de la base dans le titre
+- Gestion suppression d'un film
+- Maj plugin cinemotion
