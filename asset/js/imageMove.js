@@ -1,7 +1,9 @@
 (function(jQuery) {
 
 	var ImageMove = function() {
-		var step = 12;
+		var STEP = 12;
+		var ROTATE_STEP = 20;
+		var DELTA_ANGLE = 0;
 
 		var w = window,
 		    d = document,
@@ -27,9 +29,16 @@
 		  return angle * (Math.PI / 180);
 		}
 
-		this.initObjMoveRotate = function (obj, delta) {
+		this.initObjMoveRotate = function (obj, config) {
+
+			if(config){
+				DELTA_ANGLE = config.delta||DELTA_ANGLE;
+				STEP = config.step||STEP;
+				ROTATE_STEP = config.rotateStep||ROTATE_STEP;
+			}
+
 			var value = 0;
-			var realValue = value + delta;
+			var realValue = value + DELTA_ANGLE;
 			
 			var cosStep;
 			var sinStep;
@@ -48,11 +57,11 @@
 
 
 			function rotateLeft(value){
-				return value -= 20;
+				return value -= ROTATE_STEP;
 			}
 
 			function rotateRight(value){
-				return value += 20;
+				return value += ROTATE_STEP;
 			}
 
 			var getValue = null;
@@ -80,13 +89,13 @@
 						if(realValue >=0 && realValue < 90) {
 							obj.css('top', top + sinStep);
 							obj.css('left', left + cosStep);
-						} else if(realValue >= 90 && realValue <= 180) {
+						} else if(realValue >= 90 && realValue < 180) {
 							obj.css('top', top + cosStep);
 							obj.css('left', left - sinStep);
-						} else if(realValue > 180 && realValue <= 270) {
+						} else if(realValue >= 180 && realValue < 270) {
 							obj.css('top', top - sinStep);
 							obj.css('left', left - cosStep);
-						} else if(realValue > 270 && realValue <= 360) {
+						} else if(realValue >= 270 && realValue <= 360) {
 							obj.css('top', top - cosStep);
 							obj.css('left', left + sinStep);
 						}												
@@ -100,11 +109,11 @@
 			function calcAfterRotate(){
 				var valueModulo = value % 360;
 				valueModulo = valueModulo<0?360+valueModulo:valueModulo;
-				realValue = (valueModulo + delta)%360;
+				realValue = (valueModulo + DELTA_ANGLE)%360;
 				var angle = toRadians(valueModulo%90);
 				//angle = toRadians(realValue % 90);
-				cosStep = Math.cos(angle) * step;
-				sinStep = Math.sin(angle) * step;
+				cosStep = Math.cos(angle) * STEP;
+				sinStep = Math.sin(angle) * STEP;
 
 				console.log('angle: ' + angle);
 				console.log('value: ' + value);

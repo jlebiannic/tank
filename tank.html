@@ -22,14 +22,14 @@
 
 	<script src="asset/lib/jquery-3.1.1.js"></script>
 	<script src="asset/lib/jqueryRotate-V2.3.js"></script>
-	<script src="js/imageMove.js"></script>
+	<script src="asset/js/imageMove.js"></script>
 
     <script>
 	$(function(){
 	 	var tankImg = $('#tank');  
 		//tankImg.css('top', 10);
 		//tankImg.css('left', 10);
-		imageMove.initObjMoveRotate(tankImg, 90);
+		imageMove.initObjMoveRotate(tankImg, {delta : 90, step : 5, rotateStep : 5});
   	});
     </script> 
 
