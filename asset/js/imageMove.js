@@ -29,6 +29,10 @@
 		  return angle * (Math.PI / 180);
 		}
 
+		this.moveForward = function() {
+			$(document).keyup();
+		}
+
 		this.initObjMoveRotate = function (obj, config) {
 
 			if(config){

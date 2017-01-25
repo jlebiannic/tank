@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tank Command</title>
+</head>
+<body>
+<button id='go'>Go</button>
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="asset/lib/jquery-3.1.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		// Connexion à socket.io
+        var socket = io.connect('http://localhost:8080');
+        $('#go').click(function(){
+        	socket.emit('go');
+        });
+
+
+  	});
+</script>
+</body>
+</html>

@@ -19,5 +19,8 @@
   "homepage": "https://github.com/jlebiannic/tank#readme",
   "devDependencies": {
     "express": "^4.14.0"
+  },
+  "dependencies": {
+    "socket.io": "^1.7.2"
   }
 }

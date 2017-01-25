@@ -22,6 +22,7 @@
 
 	<script src="asset/lib/jquery-3.1.1.js"></script>
 	<script src="asset/lib/jqueryRotate-V2.3.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="asset/js/imageMove.js"></script>
 
     <script>
@@ -30,6 +31,10 @@
 		//tankImg.css('top', 10);
 		//tankImg.css('left', 10);
 		imageMove.initObjMoveRotate(tankImg, {delta : 90, step : 5, rotateStep : 5});
+
+		socket.on('go', function(data) {
+            imageMove.moveForward();
+        })
   	});
     </script> 
 
