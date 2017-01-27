@@ -1,20 +1,9 @@
 (function(jQuery) {
 
 	var ImageMove = function() {
-		var self = this;
 		var STEP = 12;
 		var ROTATE_STEP = 20;
 		var DELTA_ANGLE = 0;
-
-		var value = 0;
-		var realValue = value + DELTA_ANGLE;
-		
-		var cosStep;
-		var sinStep;
-
-		var obj;
-
-		var getValue = null;
 
 		var w = window,
 		    d = document,
@@ -24,10 +13,10 @@
 		    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
 
 
-		var minTop = 0;
-		var maxTop = y;
-		var minLeft = 0;		
-		var maxLeft = x;
+			var minTop = 0;
+			var maxTop = y;
+			var minLeft = 0;		
+			var maxLeft = x;
 
 		// Renvoie la propriété css sous forme d'entier
 		jQuery.fn.cssNum = function(prop){
@@ -40,13 +29,23 @@
 		  return angle * (Math.PI / 180);
 		}
 
-		this.initObjMoveRotate = function (imageElement, config) {
-			obj = imageElement;
+		this.moveForward = function() {
+			$(document).keyup();
+		}
+
+		this.initObjMoveRotate = function (obj, config) {
+
 			if(config){
 				DELTA_ANGLE = config.delta||DELTA_ANGLE;
 				STEP = config.step||STEP;
 				ROTATE_STEP = config.rotateStep||ROTATE_STEP;
 			}
+
+			var value = 0;
+			var realValue = value + DELTA_ANGLE;
+			
+			var cosStep;
+			var sinStep;
 
 			calcAfterRotate(); 
 
@@ -60,6 +59,17 @@
 			  }
 			});
 
+
+			function rotateLeft(value){
+				return value -= ROTATE_STEP;
+			}
+
+			function rotateRight(value){
+				return value += ROTATE_STEP;
+			}
+
+			var getValue = null;
+
 			$(document).keydown(function(e) {
 				var top = obj.cssNum('top');
 				var left = obj.cssNum('left');	
@@ -68,19 +78,31 @@
 
 				switch(e.which) {
 					case 37: // left
-						self.rotateLeft();
+						getValue = rotateLeft
+						obj.trigger('click');
+						calcAfterRotate();
 					break;
 
 					case 39: // right
-						self.rotateRight();
+						getValue = rotateRight;
+						obj.trigger('click');
+						calcAfterRotate();
 					break;
 
 					case 38: // up
-						self.moveForward();												
-					break;
-
-					case 40: // down
-						self.moveBackward();												
+						if(realValue >=0 && realValue < 90) {
+							obj.css('top', top + sinStep);
+							obj.css('left', left + cosStep);
+						} else if(realValue >= 90 && realValue < 180) {
+							obj.css('top', top + cosStep);
+							obj.css('left', left - sinStep);
+						} else if(realValue >= 180 && realValue < 270) {
+							obj.css('top', top - sinStep);
+							obj.css('left', left - cosStep);
+						} else if(realValue >= 270 && realValue <= 360) {
+							obj.css('top', top - cosStep);
+							obj.css('left', left + sinStep);
+						}												
 					break;
 					
 					default: return;
@@ -88,79 +110,23 @@
 				e.preventDefault(); // prevent the default action (scroll / move caret)
 			});
 
-		}
+			function calcAfterRotate(){
+				var valueModulo = value % 360;
+				valueModulo = valueModulo<0?360+valueModulo:valueModulo;
+				realValue = (valueModulo + DELTA_ANGLE)%360;
+				var angle = toRadians(valueModulo%90);
+				//angle = toRadians(realValue % 90);
+				cosStep = Math.cos(angle) * STEP;
+				sinStep = Math.sin(angle) * STEP;
 
-
-		function calcAfterRotate(){
-			var valueModulo = value % 360;
-			valueModulo = valueModulo<0?360+valueModulo:valueModulo;
-			realValue = (valueModulo + DELTA_ANGLE)%360;
-			var angle = toRadians(valueModulo%90);
-			//angle = toRadians(realValue % 90);
-			cosStep = Math.cos(angle) * STEP;
-			sinStep = Math.sin(angle) * STEP;
-
-			//console.log('angle: ' + angle);
-			//console.log('value: ' + value);
-			//console.log('realValue: ' + realValue);		
-		}
-
-		function setValueRotateLeft(value){
-			return value -= ROTATE_STEP;
-		}
-
-		function setValueRotateRight(value){
-			return value += ROTATE_STEP;
-		}
-
-		this.rotateLeft = function(){
-			getValue = setValueRotateLeft
-			obj.trigger('click');
-			calcAfterRotate();
-		}
-
-		this.rotateRight = function(){
-			getValue = setValueRotateRight;
-			obj.trigger('click');
-			calcAfterRotate();
-		}
-
-		this.moveBackward = function(){
-			var res = calcDeltaTopLeft();
-			var top = obj.cssNum('top');
-			var left = obj.cssNum('left');
-			obj.css('top', top-res.top);
-			obj.css('left', left-res.left);
-		}
-
-		this.moveForward = function(){
-			var deltaMove = calcDeltaTopLeft();
-			var top = obj.cssNum('top');
-			var left = obj.cssNum('left');
-			obj.css('top', top+deltaMove.top);
-			obj.css('left', left+deltaMove.left);
-		} 
-
-		function calcDeltaTopLeft (){
-			var top;
-			var left;
-
-			if(realValue >=0 && realValue < 90) {
-				top = sinStep;
-				left = cosStep;
-			} else if(realValue >= 90 && realValue < 180) {
-				top = cosStep;
-				left = -sinStep;
-			} else if(realValue >= 180 && realValue < 270) {
-				top = -sinStep;
-				left = -cosStep;
-			} else if(realValue >= 270 && realValue <= 360) {
-				top = -cosStep;
-				left = sinStep;
+				console.log('angle: ' + angle);
+				console.log('value: ' + value);
+				console.log('realValue: ' + realValue);		
 			}
+		}
 
-			return {top : top, left : left};
-		}		
+
+
 
 		/*
 		this.initObjMove = function(obj) {

@@ -4,20 +4,41 @@
 	<title>Tank Command</title>
 </head>
 <body>
-<button id='go'>Go</button>
+<button id='forward' class='tank'>UP</button>
+<button id='backward' class='tank'>DOWN</button>
+<button id='right' class='tank'>RIGHT</button>
+<button id='left' class='tank'>LEFT</button>
 
 
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="asset/lib/jquery-3.1.1.js"></script>
+<script src="/asset/lib/socket.io/socket.io.js"></script>
+<script src="/asset/lib/jquery-3.1.1.js"></script>
 <script type="text/javascript">
 	$(function(){
+		var stopclick;
 		// Connexion à socket.io
-        var socket = io.connect('http://localhost:8080');
-        $('#go').click(function(){
-        	socket.emit('go');
+        var socket = io.connect('http://192.168.0.11:8080');
+        $('.tank').mousedown(function(){
+        	stopclick = false;
+        	socket.emit('tank.'+ this.id);
+        	var button = $(this);
+        	goeson(button);
         });
 
+        $('.tank').mouseup(function(){
+        	stopclick = true;
+        });
+
+        function goeson(button){
+        	setTimeout(function(){
+        		if(!stopclick){
+        			//console.log('click !')
+        			socket.emit('tank.'+ button[0].id);
+        			goeson(button);
+        		}
+
+        	}, 30)
+        }
 
   	});
 </script>

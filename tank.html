@@ -22,7 +22,7 @@
 
 	<script src="asset/lib/jquery-3.1.1.js"></script>
 	<script src="asset/lib/jqueryRotate-V2.3.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
+	<script src="asset/lib/socket.io/socket.io.js"></script>
 	<script src="asset/js/imageMove.js"></script>
 
     <script>
@@ -31,10 +31,24 @@
 		//tankImg.css('top', 10);
 		//tankImg.css('left', 10);
 		imageMove.initObjMoveRotate(tankImg, {delta : 90, step : 5, rotateStep : 5});
-
-		socket.on('go', function(data) {
+		var socket = io.connect('http://192.168.0.11:8080');
+		socket.on('tank.forward', function(data) {
+			//console.log('forward !');
             imageMove.moveForward();
-        })
+        });
+        socket.on('tank.backward', function(data) {
+			//console.log('backward !');
+            imageMove.moveBackward();
+        });
+        socket.on('tank.right', function(data) {
+			//console.log('right !');
+            imageMove.rotateRight();
+        });
+        socket.on('tank.left', function(data) {
+			//console.log('left !');
+            imageMove.rotateLeft();
+        });
+
   	});
     </script> 
 
