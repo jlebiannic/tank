@@ -2,7 +2,9 @@
 <html>
 <head>
 	<title>Tank Command</title>
-	<link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css">
+<!-- 	<link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css"> -->
+	<link rel="stylesheet" type="text/css" href="/asset/lib/bootstrap/css/bootstrap.css">
+	
 
     <style type="text/css"> 
 		body {
@@ -59,14 +61,14 @@
 		var stopclick;
 		// Connexion à socket.io
         var socket = io.connect('http://192.168.0.11:8080');
-        $('.tank').mousedown(function(){
+        $('.tank').bind("mousedown touchstart", function(){
         	stopclick = false;
         	socket.emit('tank.'+ this.id);
         	var button = $(this);
         	goeson(button);
         });
 
-        $('.tank').mouseup(function(){
+        $(document).bind( "mouseup touchend", function(){
         	stopclick = true;
         });
 
@@ -78,7 +80,7 @@
         			goeson(button);
         		}
 
-        	}, 30)
+        	}, 35)
         }
 
   	});
