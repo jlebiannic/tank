@@ -2,13 +2,54 @@
 <html>
 <head>
 	<title>Tank Command</title>
+	<link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css">
+
+    <style type="text/css"> 
+		body {
+		  padding-top: 10px;
+		}
+		[class*="col-"] {
+		  /*background-color: lightgreen;*/
+		  /*border: 2px solid black;
+		  border-radius: 6px;*/
+		 /* line-height: 40px;*/
+		  /*text-align: center;*/
+		}
+    </style>	
 </head>
 <body>
-<button id='forward' class='tank'>UP</button>
-<button id='backward' class='tank'>DOWN</button>
-<button id='right' class='tank'>RIGHT</button>
-<button id='left' class='tank'>LEFT</button>
+<div class="container">
+	<nav class="row" /*style="margin-bottom: 20px"*/>
+		<div class="col-xs-2 ">
+			<button id='forward' class="btn btn-primary tank">UP</button>
+		</div>
+	</nav>
+	<nav class="row" /*style="margin-bottom: 20px"*/>
+		<div class="col-xs-7 ">
+			
+		</div>
+		<div class="col-xs-2">
+			<button id='left' class="btn btn-primary tank">LEFT</button>
+		</div>
+		<div class="col-xs-2">
+			<button id='right' class="btn btn-primary tank">RIGHT</button>
+		</div>
+		<div class="col-xs-1 ">
+			
+		</div>
+	</nav>
+	<nav class="row" /*style="margin-bottom: 20px"*/>
+		<div class="col-xs-2">
+			<button id='backward' class="btn btn-primary tank">DOWN</button>
+		</div>
+	</nav>
 
+
+
+<!-- <button id='backward' class="btn btn-primary tank">DOWN</button>
+<button id='right' class="btn btn-primary tank">RIGHT</button>
+<button id='left' class="btn btn-primary tank">LEFT</button> -->
+</div>
 
 
 <script src="/asset/lib/socket.io/socket.io.js"></script>
