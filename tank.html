@@ -10,13 +10,20 @@
 			top : 100px;
 			left : 100px;
 		}
+
+		#bullet {
+			position : absolute;
+			top : 10px;
+			left : 10px;
+		}
 		
     </style>
 
 </head>
 <body>
 	<div id="jeu">
-	  <img id="tank" class="voiture" src="asset/img/vj.png">
+	  <img id="tank" class="voiture" src="asset/img/vj.png"/>
+	  <img id="bullet" class="bullet" src="asset/img/bullet.png" style="display : none"/>
 	</div>
 
 
@@ -30,7 +37,7 @@
 	 	var tankImg = $('#tank');  
 		//tankImg.css('top', 10);
 		//tankImg.css('left', 10);
-		imageMove.initObjMoveRotate(tankImg, {delta : 90, step : 5, rotateStep : 5});
+		imageMove.initObjMoveRotate(tankImg, {delta : 90, step : 5, rotateStep : 5, bullet : $('#bullet')});
 		var socket = io.connect('http://192.168.0.11:8080');
 		socket.on('tank.forward', function(data) {
 			//console.log('forward !');

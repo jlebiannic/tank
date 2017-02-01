@@ -13,6 +13,7 @@
 		var sinStep;
 
 		var obj;
+		var bullet;
 
 		var getValue = null;
 
@@ -46,6 +47,7 @@
 				DELTA_ANGLE = config.delta||DELTA_ANGLE;
 				STEP = config.step||STEP;
 				ROTATE_STEP = config.rotateStep||ROTATE_STEP;
+				bullet = config.bullet;
 			}
 
 			calcAfterRotate(); 
@@ -61,11 +63,7 @@
 			});
 
 			$(document).keydown(function(e) {
-				var top = obj.cssNum('top');
-				var left = obj.cssNum('left');	
-
 				//console.log('top: ' + top + ', left: ' + left);
-
 				switch(e.which) {
 					case 37: // left
 						self.rotateLeft();
@@ -81,6 +79,10 @@
 
 					case 40: // down
 						self.moveBackward();												
+					break;
+
+					case 32: // fire
+						self.fire();												
 					break;
 					
 					default: return;
@@ -140,6 +142,18 @@
 			obj.css('top', top+deltaMove.top);
 			obj.css('left', left+deltaMove.left);
 		} 
+
+		this.fire = function(){
+			bullet.rotate(realValue);bullet.show();
+			var top = parseInt(obj.cssNum('top') + obj.height(), 10);
+			bullet.css('top', top);
+			bullet.css('left', parseInt(obj.css('left') + obj.width() + 'px'), 10);
+	console.log('top0=' + top);		
+	console.log('top=' + obj.css('top'));
+	console.log('left=' + obj.css('left'));
+	console.log('width='+bullet.width());
+	console.log('width2='+bullet[0].clientWidth);
+		}
 
 		function calcDeltaTopLeft (){
 			var top;
